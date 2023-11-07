@@ -63,11 +63,11 @@ void sendString(char* str)
 void sendInt(int n)
 {
 	// array til int string
-	char arr[10];
+	char arr[10] = {0,0,0,0,0,0,0,0,0,0};
 	
 	// konverter fra int til string, og gem i arrayet
 	//itoa(n,arr,10);
-	snprintf(arr,sizeof(arr),"%d",n);
+	snprintf(arr,sizeof(arr),"%i",n);
 	
 	// send arrayet som string
 	sendString(arr);
