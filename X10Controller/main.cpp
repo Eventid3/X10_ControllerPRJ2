@@ -31,7 +31,7 @@ int main()
 	{
 		systemcontroller.loadTemp();
 		
-		if(systemcontroller.getTemp() >= 48) // halve grader
+		if(systemcontroller.getTemp() >= systemcontroller.getTempThreshold())
 			turnOnLED(7);
 		else
 			turnOffLED(7);

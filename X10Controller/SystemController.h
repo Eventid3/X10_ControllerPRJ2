@@ -25,7 +25,8 @@ public:
 		
 		initUART(baud, databit, rx_int); // Initialize UART: Baud = 9600, 8 data bits
 		
-		m_Temperature = LM75_temperature(0);
+		m_Temperature = LM75_temperature(0) / 2.0f;
+		m_TempThreshold = 24.0f; 
 		m_Humidity = 0;
 		m_CO2 = 0;
 	}
@@ -35,10 +36,12 @@ public:
 	void handleInput(char c);
 	
 	void loadTemp();
-	float getTemp() const;
+	float getTemp() const { return m_Temperature; }
+	float getTempThreshold() const { return m_TempThreshold; }
 	void sendTemp() const;
 private:
-	int m_Temperature; // læs temperaturen i halve grader (int på 49 er 24,5 grader)
+	float m_Temperature; 
+	float m_TempThreshold;
 	float m_Humidity;
 	float m_CO2;
 };

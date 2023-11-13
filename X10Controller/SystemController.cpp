@@ -7,33 +7,23 @@
 
 #include "SystemController.h"
 
-//void SystemController::toggleLED(unsigned char led_nr)
-//{
-	//toggleLED(led_nr);
-//}
-
-float SystemController::getTemp() const
-{
-	return m_Temperature;
-}
-
 void SystemController::loadTemp()
 {
-	m_Temperature = LM75_temperature(0);
+	m_Temperature = LM75_temperature(0) / 2.0f;
 }
 
 void SystemController::sendTemp() const
 {
-	sendInt(m_Temperature/2);
+	char buffer[10];
+	int intPart = (int)m_Temperature;
+	int decimalPart = (int)((m_Temperature - intPart) * 10);
+	
+	snprintf(buffer,sizeof(buffer),"%d.%d",intPart,decimalPart);
 
-	// hvis den sidste bit i tallet er 1 (dvs tallet er ulige), så skal der sendes .0 efter der er divideret med 2
-	if(m_Temperature & 0b00000001)
-		sendString(".5");
-	else
-		sendString(".0");
+	sendString(buffer);
 }
 
-void SystemController::handleInput(char c)
+void SystemController::handleInput(char c) 
 {
 	switch (c)
 	{
