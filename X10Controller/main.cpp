@@ -5,8 +5,10 @@
  * Author : esben
  */ 
 
+#define F_CPU 16000000
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <util/delay.h>
 #include "led.h"
 #include "SystemController.h"
 
@@ -27,7 +29,14 @@ int main()
 	
 	while (1)
 	{
-
+		systemcontroller.loadTemp();
+		
+		if(systemcontroller.getTemp() >= 48) // halve grader
+			turnOnLED(7);
+		else
+			turnOffLED(7);
+		
+		_delay_ms(1000);
 	}
 }
 

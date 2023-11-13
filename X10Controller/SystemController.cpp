@@ -12,12 +12,12 @@
 	//toggleLED(led_nr);
 //}
 
-void SystemController::getTemp() const
+float SystemController::getTemp() const
 {
-	sendInt(m_Temperature);
+	return m_Temperature;
 }
 
-void SystemController::setTemp()
+void SystemController::loadTemp()
 {
 	m_Temperature = LM75_temperature(0);
 }
@@ -43,7 +43,7 @@ void SystemController::handleInput(char c)
 			break;
 		case 'l':
 		case 'L':
-			setTemp();
+			loadTemp();
 			toggleLED(0);
 			sendTemp();
 			break;

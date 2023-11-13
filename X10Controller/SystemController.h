@@ -34,8 +34,8 @@ public:
 	
 	void handleInput(char c);
 	
-	void setTemp();
-	void getTemp() const;
+	void loadTemp();
+	float getTemp() const;
 	void sendTemp() const;
 private:
 	int m_Temperature; // læs temperaturen i halve grader (int på 49 er 24,5 grader)
