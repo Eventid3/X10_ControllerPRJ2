@@ -16,9 +16,12 @@ SystemController systemcontroller(9600);
 
 ISR(USART0_RX_vect)
 {
+	//systemcontroller.readString(10);
 	char c = readChar();
 	
 	systemcontroller.handleInput(c);
+	
+	//sendString(systemcontroller.getBuffer());
 }
 
 int main()
@@ -26,6 +29,8 @@ int main()
 	sei();
 	
 	initLEDport();
+	
+	//sendString("Init!\r\n");
 	
 	while (1)
 	{

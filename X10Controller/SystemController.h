@@ -35,13 +35,20 @@ public:
 	
 	void handleInput(char c);
 	
+	void readString(unsigned char maxLength);
+	
 	void loadTemp();
 	float getTemp() const { return m_Temperature; }
 	float getTempThreshold() const { return m_TempThreshold; }
 	void sendTemp() const;
+	
+	char* getBuffer() { return m_Buffer; }
+	void clearBuffer();
 private:
 	float m_Temperature; 
 	float m_TempThreshold;
 	float m_Humidity;
 	float m_CO2;
+	
+	char m_Buffer[10];
 };
