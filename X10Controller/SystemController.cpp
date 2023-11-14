@@ -40,6 +40,11 @@ void SystemController::clearBuffer()
 	 }
 }
 
+float SystemController::convertBufferToFloat()
+{
+	return atof(m_Buffer);
+}
+
 void SystemController::loadTemp()
 {
 	m_Temperature = LM75_temperature(0) / 2.0f;
@@ -60,27 +65,25 @@ void SystemController::handleInput(char c)
 {
 	switch (c)
 	{
-		case 'a':
-		case 'A':
+		case '1':
 			toggleLED(1);
 			break;
-		case 'l':
-		case 'L':
+		case '2':
 			loadTemp();
 			toggleLED(0);
 			sendTemp();
 			break;
-		case 'n':
-		case 'N':
+		case '3':
 			toggleLED(2);
 			readString(10);
+			m_TempThreshold = convertBufferToFloat();
 			break;
-		case 'r':
-		case 'R':
+		case '4':
 			toggleLED(3);
 			sendString(m_Buffer);
 			break;
-			
+		default:
+			break;
 	}
 	
 	//if (m_Buffer != '\0')

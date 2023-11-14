@@ -43,6 +43,7 @@ public:
 	void sendTemp() const;
 	
 	char* getBuffer() { return m_Buffer; }
+	float convertBufferToFloat();
 	void clearBuffer();
 private:
 	float m_Temperature; 
