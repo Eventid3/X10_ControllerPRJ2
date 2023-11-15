@@ -11,6 +11,7 @@
 #include <util/delay.h>
 #include "led.h"
 #include "SystemController.h"
+#include "Transmitter.h"
 
 SystemController systemcontroller(9600);
 
