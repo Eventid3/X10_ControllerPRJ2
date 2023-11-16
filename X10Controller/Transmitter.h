@@ -13,25 +13,18 @@
 #include <avr/interrupt.h>
 
 // This should be in main:
-/* const int zeroCrossPin = 21;
-
-void loop() {
-	if (Encoder.isSafeToSend) {
-		Send Manchester-encoded information to the receiver
-
-		Reset the flag after sending the information:
-		Encoder.isSafeToSend = false;
-	}
-}*/
+/* const int zeroCrossPin = 21;*/
 
 
 ISR(INT0_vect);
 
-class Transmitter {
+class Transmitter
+{
 	public:
 	Transmitter(int zeroCrossPin); // Constructor
 	void Setup();
-	//void SendCode(int bit);
+	//void SendCode(int)const;
+	
 	static void ZeroCrossInterrupt();
 
 	private:

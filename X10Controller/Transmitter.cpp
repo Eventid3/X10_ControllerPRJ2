@@ -14,11 +14,13 @@ Transmitter::Transmitter(int zeroCrossPin) : zeroCrossPin(zeroCrossPin), isSafeT
 	instance = this;
 }
 
-ISR(INT0_vect) {
+ISR(INT0_vect) 
+{
 	Transmitter::ZeroCrossInterrupt();
 }
 
-void Transmitter::Setup() {
+void Transmitter::Setup()
+ {
 	// Configure PD0 (pin 21) as input
 	DDRD &= ~(1 << PD0); // Clear the bit in the DDRD register to set it as an input
 	// PD0 corresponds to pin 21 on the ATmega2560
@@ -42,5 +44,57 @@ void Transmitter::ZeroCrossInterrupt()
 	// Sets the value of the isSafeToSend member variable to true for the instance of the Encoder class
 	// that the instance pointer is pointing to.
 }
+
+
+
+/*
+void Transmitter::SendCode(int &condition)const
+{
+	if (condition==1)
+	{
+			int array[5]=[1,1,1,0,1]
+				for (int i=0;i<5;i++)
+				{
+					if (Transmitter.isSafeToSend)
+					{
+						if (array[i]=1)
+						{
+							//OC3A=PE, ben 3
+							TCCR3A=0b00000000; //Sætter CTC mode
+							TCCR3B=0b00001010; //Sætter CTC mode 00001 og prescaler 010
+							OCR3A=66; //Værdi til OCR1A register.
+						}
+						Transmitter.isSafeToSend = false;
+					}
+				}
+	}
+
+	if (condition==0)
+	{
+		int array[5]=[1,1,1,0,0]
+			for (int i=0;i<5;i++)
+			{
+				if (Transmitter.isSafeToSend)
+				{
+					if (array[i]=1)
+					{
+						//OC3A=PE, ben 3
+						TCCR3A=0b00000000; //Sætter CTC mode
+						TCCR3B=0b00001010; //Sætter CTC mode 00001 og prescaler 010
+						OCR3A=66; //Værdi til OCR1A register.
+					}
+				Transmitter.isSafeToSend = false;
+				}
+			}
+	}
+}
+
+
+
+
+}
+
+}
+*/
 
 //attachInterrupt(PIN_INTERRUPT, ISR, FALLING);

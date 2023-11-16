@@ -26,16 +26,21 @@ int main()
 {
 	sei();
 	
+
+
 	initLEDport();
 	
 	while (1)
 	{
+			
 		systemcontroller.loadTemp();
 		
 		if(systemcontroller.getTemp() >= systemcontroller.getTempThreshold())
 			turnOnLED(7);
+			//sendCode(true);
 		else
 			turnOffLED(7);
+			//sendCode(false);
 		
 		_delay_ms(1000);
 	}
