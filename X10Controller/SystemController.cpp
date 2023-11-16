@@ -50,15 +50,28 @@ void SystemController::loadTemp()
 	m_Temperature = LM75_temperature(0) / 2.0f;
 }
 
-void SystemController::sendTemp() const
+void SystemController::sendTemp()
 {
-	char buffer[10];
-	int intPart = (int)m_Temperature;
-	int decimalPart = (int)((m_Temperature - intPart) * 10);
+	loadFloatToBuffer(m_Temperature);
 	
-	snprintf(buffer,sizeof(buffer),"%d.%d",intPart,decimalPart);
+	sendString(m_Buffer);
+}
 
-	sendString(buffer);
+void SystemController::sendTempThreshold()
+{
+	loadFloatToBuffer(m_TempThreshold);
+	
+	sendString(m_Buffer);
+}
+
+void SystemController::loadFloatToBuffer(float f)
+{
+	clearBuffer();
+	
+	int intPart = (int)f;
+	int decimalPart = (int)((f - intPart) * 10);
+	
+	snprintf(m_Buffer,sizeof(m_Buffer),"%d.%d",intPart,decimalPart);
 }
 
 void SystemController::handleInput(char c) 
@@ -80,7 +93,7 @@ void SystemController::handleInput(char c)
 			break;
 		case '4':
 			toggleLED(3);
-			sendString(m_Buffer);
+			sendTempThreshold();
 			break;
 		default:
 			break;

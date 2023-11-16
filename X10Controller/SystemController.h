@@ -40,10 +40,12 @@ public:
 	void loadTemp();
 	float getTemp() const { return m_Temperature; }
 	float getTempThreshold() const { return m_TempThreshold; }
-	void sendTemp() const;
+	void sendTemp();
+	void sendTempThreshold();
 	
 	char* getBuffer() { return m_Buffer; }
 	float convertBufferToFloat();
+	void loadFloatToBuffer(float f);
 	void clearBuffer();
 private:
 	float m_Temperature; 
