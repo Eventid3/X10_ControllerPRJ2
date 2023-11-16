@@ -8,17 +8,17 @@
 #include "Transmitter.h"
 
 
-Encoder* Encoder::instance = NULL;
+Transmitter* Transmitter::instance = NULL;
 
-Encoder::Encoder(int zeroCrossPin) : zeroCrossPin(zeroCrossPin), isSafeToSend(false) {
+Transmitter::Transmitter(int zeroCrossPin) : zeroCrossPin(zeroCrossPin), isSafeToSend(false) {
 	instance = this;
 }
 
 ISR(INT0_vect) {
-	Encoder::ZeroCrossInterrupt();
+	Transmitter::ZeroCrossInterrupt();
 }
 
-void Encoder::Setup() {
+void Transmitter::Setup() {
 	// Configure PD0 (pin 21) as input
 	DDRD &= ~(1 << PD0); // Clear the bit in the DDRD register to set it as an input
 	// PD0 corresponds to pin 21 on the ATmega2560
@@ -33,7 +33,7 @@ void Encoder::Setup() {
 	sei(); // Enable global interrupts
 }
 
-void Encoder::ZeroCrossInterrupt()
+void Transmitter::ZeroCrossInterrupt()
 {
 	// This function will be called on the falling edge of INT0
 	// It indicates a zero crossing event

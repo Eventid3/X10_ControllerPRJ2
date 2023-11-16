@@ -27,9 +27,9 @@ void loop() {
 
 ISR(INT0_vect);
 
-class Encoder {
+class Transmitter {
 	public:
-	Encoder(int zeroCrossPin); // Constructor
+	Transmitter(int zeroCrossPin); // Constructor
 	void Setup();
 	//void SendCode(int bit);
 	static void ZeroCrossInterrupt();
@@ -37,7 +37,7 @@ class Encoder {
 	private:
 	int zeroCrossPin; // In this case zeroCrossPin = pin 21 
 	volatile bool isSafeToSend; // flag that indicates ISR triggering (by the zero crossed detector)
-	static Encoder* instance; // Singleton pattern
+	static Transmitter* instance; // Singleton pattern
 	// The Singleton pattern ensures that a class has only one instance and provides a global point of access to that instance
 };
 
