@@ -11,37 +11,62 @@
 #include <util/delay.h>
 #include "led.h"
 #include "SystemController.h"
+#include "Transmitter.h"
 
-SystemController systemcontroller(9600);
+const int zeroCrossPin = 21;
 
-ISR(USART0_RX_vect)
+//SystemController systemcontroller(9600);
+
+//ISR(USART0_RX_vect)
+//{
+	//char c = readChar();
+	//
+	//systemcontroller.handleInput(c);
+//}
+
+Transmitter transmitter(zeroCrossPin);
+
+ISR(INT0_vect)
 {
-	//systemcontroller.readString(10);
-	char c = readChar();
-	
-	systemcontroller.handleInput(c);
-	
-	//sendString(systemcontroller.getBuffer());
+	transmitter.ZeroCrossInterrupt();
 }
 
 int main()
 {
 	sei();
 	
+	//initUART(9600,1,0);
 	initLEDport();
+	initSwitchPort();
+	initUART(9600,1,0);
+	
+	sendString("UART init\n\r");
+	transmitter.Setup();
 	
 	//sendString("Init!\r\n");
 	
 	while (1)
-	{
-		systemcontroller.loadTemp();
+	{		
+		//transmitter.GenerateBurst();
+		if (switchOn(1))
+		{
+			sendString("Startet\r\n");
+			transmitter.SendCode(1);
+		}
+		else if (switchOn(2))
+		{
+			transmitter.SendCode(0);
+		}
 		
-		if(systemcontroller.getTemp() >= systemcontroller.getTempThreshold())
-			turnOnLED(7);
-		else
-			turnOffLED(7);
-		
-		_delay_ms(1000);
+		//systemcontroller.loadTemp();
+		//
+		//if(systemcontroller.getTemp() >= systemcontroller.getTempThreshold())
+			//turnOnLED(7);
+		//else
+			//turnOffLED(7);
+			////sendCode(false);
+		//
+		//_delay_ms(1000);
 	}
 }
 

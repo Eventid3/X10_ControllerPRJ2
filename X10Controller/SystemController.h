@@ -8,11 +8,14 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <avr/io.h>
+#include <avr/interrupt.h>
 
 #include "uart.h"
 #include "led.h"
 #include "switch.h"
 #include "lm751.h"
+
 
 class SystemController
 {
