@@ -49,7 +49,8 @@ void Transmitter::ZeroCrossInterrupt()
 
 /*
 void Transmitter::SendCode(int &condition)const
-{
+{	
+	
 	if (condition==1)
 	{
 			int array[5]=[1,1,1,0,1]
@@ -59,10 +60,10 @@ void Transmitter::SendCode(int &condition)const
 					{
 						if (array[i]=1)
 						{
-							//OC3A=PE, ben 3
-							TCCR3A=0b00000000; //Sætter CTC mode
-							TCCR3B=0b00001010; //Sætter CTC mode 00001 og prescaler 010
-							OCR3A=66; //Værdi til OCR1A register.
+							// Init af timer 1:
+							TCCR1A = 0b00010000; //Sætter CTC mode
+							TCCR1B = 0b00001001; //Sætter CTC mode 00001 og prescaler 010
+							OCR1A = 65; //Værdi til OCR1A register.
 						}
 						Transmitter.isSafeToSend = false;
 					}
@@ -78,23 +79,17 @@ void Transmitter::SendCode(int &condition)const
 				{
 					if (array[i]=1)
 					{
-						//OC3A=PE, ben 3
-						TCCR3A=0b00000000; //Sætter CTC mode
-						TCCR3B=0b00001010; //Sætter CTC mode 00001 og prescaler 010
-						OCR3A=66; //Værdi til OCR1A register.
+						// Init af timer 1:
+						TCCR1A = 0b00010000; //Sætter CTC mode
+						TCCR1B = 0b00001001; //Sætter CTC mode 00001 og prescaler 010
+						OCR1A = 65; //Værdi til OCR1A register.
 					}
 				Transmitter.isSafeToSend = false;
 				}
 			}
 	}
 }
-
-
-
-
-}
-
-}
 */
 
-//attachInterrupt(PIN_INTERRUPT, ISR, FALLING);
+
+

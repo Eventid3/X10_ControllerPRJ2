@@ -13,6 +13,8 @@
 #include "SystemController.h"
 #include "Transmitter.h"
 
+const int zeroCrossPin = 21;
+
 SystemController systemcontroller(9600);
 
 ISR(USART0_RX_vect)
@@ -27,17 +29,21 @@ int main()
 	sei();
 	
 
-
+  
 	initLEDport();
 	
 	while (1)
 	{
-			
+		OCR1A = 65;
+		
+		// Init af timer 1
+		TCCR1A = 0b00010000;
+		TCCR1B = 0b00001001;
+		
 		systemcontroller.loadTemp();
 		
 		if(systemcontroller.getTemp() >= systemcontroller.getTempThreshold())
 			turnOnLED(7);
-			//sendCode(true);
 		else
 			turnOffLED(7);
 			//sendCode(false);
