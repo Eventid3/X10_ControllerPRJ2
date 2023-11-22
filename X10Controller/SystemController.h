@@ -4,7 +4,10 @@
  * Created: 11/1/2023 10:59:13 AM
  *  Author: esben
  */ 
-#pragma once
+
+#ifndef X10CONTROLLER
+#define X10CONTROLLER
+
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,7 +18,7 @@
 #include "led.h"
 #include "switch.h"
 #include "lm751.h"
-
+#include "Transmitter.h"
 
 class SystemController
 {
@@ -32,6 +35,9 @@ public:
 		m_TempThreshold = 24.0f; 
 		m_Humidity = 0;
 		m_CO2 = 0;
+		
+		m_Transmitter = Transmitter();
+		m_Transmitter.Setup();
 	}
 	
 	//void toggleLED(unsigned char led_nr);
@@ -50,6 +56,8 @@ public:
 	float convertBufferToFloat();
 	void loadFloatToBuffer(float f);
 	void clearBuffer();
+	
+	Transmitter GetTransmitter() { return m_Transmitter; }
 private:
 	float m_Temperature; 
 	float m_TempThreshold;
@@ -57,4 +65,8 @@ private:
 	float m_CO2;
 	
 	char m_Buffer[10];
+	
+	Transmitter m_Transmitter;
 };
+
+#endif

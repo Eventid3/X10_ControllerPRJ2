@@ -5,7 +5,9 @@
  *  Author: linev
  */ 
 
-#pragma once
+#ifndef X10TRANSMITTER
+#define X10TRANSMITTER
+
 #define F_CPU 16000000
 #include <string.h>
 #include <stdio.h>
@@ -16,27 +18,18 @@
 #include "led.h"
 #include "uart.h"
 
-
-
-ISR(INT0_vect);
-
 class Transmitter
 {
-	private:
-	int zeroCrossPin; // In this case zeroCrossPin = pin 21
-	//static Transmitter* instance; // Singleton pattern
-	
-	
 	public:
-	Transmitter(int zeroCrossPin); // Constructor
+	Transmitter(){}
 	
 	void Setup();
-	void SendCode(int);
-	int codeIndex = 0;
-	int sendCode[5] = {1,1,1,0,1};
-	//bool isSafeToSend; // flag that indicates ISR triggering (by the zero crossed detector)
+	void SendCode(unsigned char);
+	static unsigned char m_CodeIndex;
+	static unsigned char m_SendCode[5];
 	void GenerateBurst() const;
 	
 	void ZeroCrossInterrupt();
 };
 
+#endif

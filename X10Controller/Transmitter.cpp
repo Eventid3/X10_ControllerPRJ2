@@ -8,74 +8,70 @@
 #include "Transmitter.h"
 
 
-//Transmitter* Transmitter::instance = NULL;
-
-Transmitter::Transmitter(int zeroCrossPin) : zeroCrossPin(zeroCrossPin) {}
-
-
 void Transmitter::Setup()
  {
-	// Configure PD0 (pin 21) as input
-	DDRD = 0; // Clear the bit in the DDRD register to set it as an input
-	// PD0 corresponds to pin 21 on the ATmega2560
+	// port E til inputs
+	DDRE = 0; 
+	
+	DDRH = 0xFF; //Port H til timer 4 output
 
-	// Enable external interrupt on INT0 (PD0)
-	EICRA |= (1 << ISC01); // Set INT0 to trigger on falling edge
-	//EICRA &= ~(1 << ISC00);
+	// Disable external interrupt lige for nu
+	EIMSK = 0;
+	EICRA = 0b00000000; 
+	EICRB = 0b00000001; // Set INT4 to trigger on any edge
 
-	//EIFR |= (1 << INTF0); // Clear any pending interrupt
-
-	sei(); // Enable global interrupts
+	m_CodeIndex = 0;
+	
+	m_SendCode[0] = 1;
+	m_SendCode[1] = 1;
+	m_SendCode[2] = 1;
+	m_SendCode[3] = 0;
+	m_SendCode[4] = 1;
 }
 
 void Transmitter::ZeroCrossInterrupt()
 {
-	// This function will be called on the falling edge of INT0
+	// This function will be called on the falling edge of INT4
 	// It indicates a zero crossing event	
-	//if (isSafeToSend)
+	if(m_SendCode[m_CodeIndex])
 	{
-		if(sendCode[codeIndex])
-		 {
-			 GenerateBurst();
-		 }
-		 turnOnLED(codeIndex);
-		 sendString("codeIndex: ");
-		 sendInt(codeIndex);
-		 sendChar('\r');
-		 sendChar('\n');
-		 sendString("value: ");
-		 sendInt(sendCode[codeIndex]);
-		 sendChar('\r');
-		 sendChar('\n');
-		 codeIndex++;
-		 if (codeIndex==5)
-		 {
-			 //instance->isSafeToSend = false;
-			 EIMSK = 0; // Disable external interrupt INT0
-			 writeAllLEDs(0);
-		 }
+		 GenerateBurst();
+	}
+	 toggleLED(m_CodeIndex);
+
+	m_CodeIndex++;
+	if (m_CodeIndex >= 5)
+	{
+		if (m_SendCode[4])
+			turnOnLED(7);
+		else
+			turnOffLED(7);
+			
+		EIMSK = 0; // Disable external interrupt INT4
+		m_CodeIndex = 0;
 	}
 }
 
 void Transmitter::GenerateBurst() const
 {
-	OCR1A = 65;
-	// Init af timer 1
-	TCCR1A = 0b00010000;
-	TCCR1B = 0b00001001;
+	OCR4A = 65;
+	// Init af timer 4
+	TCCR4A = 0b00010000;
+	TCCR4B = 0b00001001;
 	
-	_delay_ms(200);
-	TCCR1B = 0b00001000;
+	_delay_ms(5);
+	TCCR4B = 0b00001000;
+	
+	PINH = 0;
+	//turnOffLED(6);
 }
 
 
 
-
-void Transmitter::SendCode(int condition)
+void Transmitter::SendCode(unsigned char condition)
 {
-	sendCode[4] = condition;
-	//instance->isSafeToSend = true;
-	EIMSK |= (1 << INT0); // Enable external interrupt INT0
+	m_SendCode[4] = condition;
+	EIMSK = 0b00010000; // Enable external interrupt INT4
 }
 
 

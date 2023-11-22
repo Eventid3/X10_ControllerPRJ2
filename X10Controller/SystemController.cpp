@@ -98,15 +98,5 @@ void SystemController::handleInput(char c)
 		default:
 			break;
 	}
-	
-	//if (m_Buffer != '\0')
-	//{
-		//if (m_Buffer[0] == 'a' || m_Buffer[0] == 'A') { toggleLED(1); }
-		//if (m_Buffer[0] == 'l' || m_Buffer[0] == 'L') 
-		//{
-			//loadTemp();
-			//toggleLED(0);
-			//sendTemp();
-		//}
-	//}
+
 }
