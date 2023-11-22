@@ -15,40 +15,56 @@
 
 const int zeroCrossPin = 21;
 
-SystemController systemcontroller(9600);
+//SystemController systemcontroller(9600);
 
-ISR(USART0_RX_vect)
+//ISR(USART0_RX_vect)
+//{
+	//char c = readChar();
+	//
+	//systemcontroller.handleInput(c);
+//}
+
+Transmitter transmitter(zeroCrossPin);
+
+ISR(INT0_vect)
 {
-	char c = readChar();
-	
-	systemcontroller.handleInput(c);
+	transmitter.ZeroCrossInterrupt();
 }
 
 int main()
 {
 	sei();
 	
-
-  
+	//initUART(9600,1,0);
 	initLEDport();
+	initSwitchPort();
+	initUART(9600,1,0);
+	
+	sendString("UART init\n\r");
+	transmitter.Setup();
 	
 	while (1)
-	{
-		OCR1A = 65;
+	{		
+		//transmitter.GenerateBurst();
+		if (switchOn(1))
+		{
+			sendString("Startet\r\n");
+			transmitter.SendCode(1);
+		}
+		else if (switchOn(2))
+		{
+			transmitter.SendCode(0);
+		}
 		
-		// Init af timer 1
-		TCCR1A = 0b00010000;
-		TCCR1B = 0b00001001;
-		
-		systemcontroller.loadTemp();
-		
-		if(systemcontroller.getTemp() >= systemcontroller.getTempThreshold())
-			turnOnLED(7);
-		else
-			turnOffLED(7);
-			//sendCode(false);
-		
-		_delay_ms(1000);
+		//systemcontroller.loadTemp();
+		//
+		//if(systemcontroller.getTemp() >= systemcontroller.getTempThreshold())
+			//turnOnLED(7);
+		//else
+			//turnOffLED(7);
+			////sendCode(false);
+		//
+		//_delay_ms(1000);
 	}
 }
 
