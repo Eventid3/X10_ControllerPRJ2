@@ -44,7 +44,7 @@ public:
 	
 	void handleInput(char c);
 	
-	void readString(unsigned char maxLength);
+	void readString(uint8_t maxLength);
 	
 	void loadTemp();
 	float getTemp() const { return m_Temperature; }

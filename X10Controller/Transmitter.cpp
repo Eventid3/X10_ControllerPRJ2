@@ -52,6 +52,7 @@ void Transmitter::ZeroCrossInterrupt()
 	}
 }
 
+
 void Transmitter::GenerateBurst() const
 {
 	OCR4A = 65;
@@ -59,16 +60,15 @@ void Transmitter::GenerateBurst() const
 	TCCR4A = 0b00010000;
 	TCCR4B = 0b00001001;
 	
-	_delay_ms(5);
+	_delay_ms(300); // 1ms standard i x10 protokollen
 	TCCR4B = 0b00001000;
 	
-	PINH = 0;
-	//turnOffLED(6);
+	PORTH &= 0b11101111;
 }
 
 
 
-void Transmitter::SendCode(unsigned char condition)
+void Transmitter::SendCode(uint8_t condition)
 {
 	m_SendCode[4] = condition;
 	EIMSK = 0b00010000; // Enable external interrupt INT4

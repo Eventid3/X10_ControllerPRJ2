@@ -24,12 +24,12 @@ class Transmitter
 	Transmitter(){}
 	
 	void Setup();
-	void SendCode(unsigned char);
-	static unsigned char m_CodeIndex;
-	static unsigned char m_SendCode[5];
+	void SendCode(uint8_t);
 	void GenerateBurst() const;
-	
 	void ZeroCrossInterrupt();
+	
+	static uint8_t m_CodeIndex;
+	static uint8_t m_SendCode[5];
 };
 
 #endif

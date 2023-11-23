@@ -7,13 +7,13 @@
 
 #include "SystemController.h"
 
-void SystemController::readString(unsigned char maxLength)
+void SystemController::readString(uint8_t maxLength)
 {
 	clearBuffer();
 	
 	while (!charReady()){}
-		
-	unsigned int i = 0;
+	
+	uint8_t i = 0;
 
 	while (i < maxLength - 1)
 	{
@@ -34,7 +34,7 @@ void SystemController::readString(unsigned char maxLength)
 
 void SystemController::clearBuffer()
 {
-	 for (unsigned int i = 0; i < 10; i++)
+	 for (uint8_t i = 0; i < 10; i++)
 	 {
 		 m_Buffer[i] = '\0';
 	 }
@@ -79,20 +79,17 @@ void SystemController::handleInput(char c)
 	switch (c)
 	{
 		case '1':
-			toggleLED(1);
-			break;
-		case '2':
 			loadTemp();
-			toggleLED(0);
+			//toggleLED(0); // Til debugging
 			sendTemp();
 			break;
-		case '3':
-			toggleLED(2);
+		case '2':
+			//toggleLED(1); // til debugging
 			readString(10);
 			m_TempThreshold = convertBufferToFloat();
 			break;
-		case '4':
-			toggleLED(3);
+		case '3':
+			//toggleLED(2); // Til debugging
 			sendTempThreshold();
 			break;
 		default:
