@@ -18,9 +18,13 @@ void Transmitter::Setup()
 	// Disable external interrupt lige for nu
 	EIMSK = 0;
 	EICRA = 0b00000000; 
-	EICRB = 0b00000001; // Set INT4 to trigger on any edge
+	EICRB = 0b00000011; // Set INT4 to trigger on any edge
+	
+	EIMSK = 0b00010000; // tænd zerocross
 
 	m_CodeIndex = 0;
+	
+	m_ZeroCrossFlag = false;
 	
 	m_SendCode[0] = 1;
 	m_SendCode[1] = 1;
@@ -47,9 +51,11 @@ void Transmitter::ZeroCrossInterrupt()
 		else
 			turnOffLED(7);
 			
-		EIMSK = 0; // Disable external interrupt INT4
+		//EIMSK = 0; // Disable external interrupt INT4
+		m_ZeroCrossFlag = false;
 		m_CodeIndex = 0;
 	}
+	
 }
 
 
@@ -60,10 +66,15 @@ void Transmitter::GenerateBurst() const
 	TCCR4A = 0b00010000;
 	TCCR4B = 0b00001001;
 	
-	_delay_ms(300); // 1ms standard i x10 protokollen
+	_delay_ms(10); // 1ms standard i x10 protokollen
 	TCCR4B = 0b00001000;
 	
 	PORTH &= 0b11101111;
+}
+
+void Transmitter::SetZeroCrossFlag()
+{
+	m_ZeroCrossFlag = true;
 }
 
 
@@ -71,7 +82,7 @@ void Transmitter::GenerateBurst() const
 void Transmitter::SendCode(uint8_t condition)
 {
 	m_SendCode[4] = condition;
-	EIMSK = 0b00010000; // Enable external interrupt INT4
+	//EIMSK = 0b00010000; // Enable external interrupt INT4
 }
 
 

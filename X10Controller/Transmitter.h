@@ -27,9 +27,13 @@ class Transmitter
 	void SendCode(uint8_t);
 	void GenerateBurst() const;
 	void ZeroCrossInterrupt();
+	void SetZeroCrossFlag();
+	bool ReadyToRecieve() const { return m_ZeroCrossFlag; }
 	
 	static uint8_t m_CodeIndex;
 	static uint8_t m_SendCode[5];
+	
+	static bool m_ZeroCrossFlag;
 };
 
 #endif
