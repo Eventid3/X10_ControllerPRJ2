@@ -52,7 +52,7 @@ void Transmitter::ZeroCrossInterrupt()
 			turnOffLED(7);
 			
 		//EIMSK = 0; // Disable external interrupt INT4
-		m_ZeroCrossFlag = false;
+		m_ZeroCrossFlag = false; // Disable zerocross interrupt flag
 		m_CodeIndex = 0;
 	}
 	
