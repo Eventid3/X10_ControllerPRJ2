@@ -30,7 +30,7 @@ int main()
 	
 	while (1)
 	{		
-		systemcontroller.loadTemp();
+		/*systemcontroller.loadTemp();
 		
 		// TODO Hysterese!
 		
@@ -50,24 +50,35 @@ int main()
 			systemcontroller.GetTransmitter().SetZeroCrossFlag();
 			turnOffLED(5);
 			
-		}
+		}*/
 		
-		_delay_ms(1000);
+		//_delay_ms(1000);
 		
-		//systemcontroller.GetTransmitter().GenerateBurst();
-		//_delay_ms(20);
+		
+		// --- TEST CODE ----
+		// ------------------
+		tempHandle = true;
+		systemcontroller.GetTransmitter().SendCode(1);
+		systemcontroller.GetTransmitter().SetZeroCrossFlag();
+		turnOnLED(5);
+		_delay_ms(1500);
+		tempHandle = false;
+		systemcontroller.GetTransmitter().SendCode(0);
+		systemcontroller.GetTransmitter().SetZeroCrossFlag();
+		turnOffLED(5);
+		_delay_ms(1500);
+		
 	}
 }
 
 ISR(INT4_vect)
 {
+	toggleLED(6);
 		
 	if (systemcontroller.GetTransmitter().ReadyToRecieve())
 	{
-		toggleLED(4);
-	
+		systemcontroller.GetTransmitter().DisableZeroCrossFlag();
 		systemcontroller.GetTransmitter().ZeroCrossInterrupt();
-	
 	}
 }
 

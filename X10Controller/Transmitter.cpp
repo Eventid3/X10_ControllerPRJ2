@@ -14,11 +14,14 @@ void Transmitter::Setup()
 	DDRE = 0; 
 	
 	DDRH = 0xFF; //Port H til timer 4 output
+	DDRA = 0xFF;
+	PORTA |= (1 << 0);
+	PORTH |= (1<<PINH4);
 
 	// Disable external interrupt lige for nu
 	EIMSK = 0;
 	EICRA = 0b00000000; 
-	EICRB = 0b00000011; // Set INT4 to trigger on any edge
+	EICRB = 0b00000011; // Set INT4 to trigger on rising edge
 	
 	EIMSK = 0b00010000; // tænd zerocross
 
@@ -44,6 +47,8 @@ void Transmitter::ZeroCrossInterrupt()
 	 toggleLED(m_CodeIndex);
 
 	m_CodeIndex++;
+	m_ZeroCrossFlag = true;
+	
 	if (m_CodeIndex >= 5)
 	{
 		if (m_SendCode[4])
@@ -55,7 +60,6 @@ void Transmitter::ZeroCrossInterrupt()
 		m_ZeroCrossFlag = false; // Disable zerocross interrupt flag
 		m_CodeIndex = 0;
 	}
-	
 }
 
 
@@ -65,11 +69,10 @@ void Transmitter::GenerateBurst() const
 	// Init af timer 4
 	TCCR4A = 0b00010000;
 	TCCR4B = 0b00001001;
-	
-	_delay_ms(10); // 1ms standard i x10 protokollen
+	TDelay(3); // 1ms standard i x10 protokollen
 	TCCR4B = 0b00001000;
 	
-	PORTH &= 0b11101111;
+	PORTH &= (1<<PINH4);
 }
 
 void Transmitter::SetZeroCrossFlag()
@@ -77,6 +80,10 @@ void Transmitter::SetZeroCrossFlag()
 	m_ZeroCrossFlag = true;
 }
 
+void Transmitter::DisableZeroCrossFlag()
+{
+	m_ZeroCrossFlag = false;
+}
 
 
 void Transmitter::SendCode(uint8_t condition)
@@ -85,6 +92,21 @@ void Transmitter::SendCode(uint8_t condition)
 	//EIMSK = 0b00010000; // Enable external interrupt INT4
 }
 
+void Transmitter::TDelay(float ms) const
+{
+	ms = ms > 32.0f ? 32.0f : ms;
+	ms /= 1000.0f;
+	TCNT5 = (int)(65536.0f - ms*16000000.0f/8.0f); // load rigtigt tal i timeren
+	
+	// init timer med 8 prescaler og start den
+	TCCR5A = 0b00000000;
+	TCCR5B = 0b00000010;
+	
+	while ((TIFR5 & (1<<0)) == 0) { /* bliv her indtil timeren er nul */ }
+	
+	TCCR5B = 0; // stop counteren
+	TIFR5 = 1; // nulstil overflow flag
+}
 
 
 

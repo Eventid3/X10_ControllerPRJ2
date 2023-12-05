@@ -28,7 +28,10 @@ class Transmitter
 	void GenerateBurst() const;
 	void ZeroCrossInterrupt();
 	void SetZeroCrossFlag();
+	void DisableZeroCrossFlag();
 	bool ReadyToRecieve() const { return m_ZeroCrossFlag; }
+		
+	void TDelay(float ms) const;
 	
 	static uint8_t m_CodeIndex;
 	static uint8_t m_SendCode[5];
