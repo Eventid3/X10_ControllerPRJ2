@@ -13,7 +13,6 @@ void Transmitter::Setup()
 	// port E til inputs
 	DDRE = 0; 
 	
-	DDRH = 0xFF; //Port H til timer 4 output
 	DDRA = 0xFF;
 	PORTA |= (1 << 0);
 	PORTH |= (1<<PINH4);
@@ -30,10 +29,15 @@ void Transmitter::Setup()
 	m_ZeroCrossFlag = false;
 	
 	m_SendCode[0] = 1;
-	m_SendCode[1] = 1;
+	m_SendCode[1] = 0;
 	m_SendCode[2] = 1;
 	m_SendCode[3] = 0;
 	m_SendCode[4] = 1;
+	m_SendCode[5] = 0;
+	m_SendCode[6] = 0;
+	m_SendCode[7] = 0;
+	m_SendCode[8] = 0;
+	m_SendCode[9] = 0;
 }
 
 void Transmitter::ZeroCrossInterrupt()
@@ -44,14 +48,13 @@ void Transmitter::ZeroCrossInterrupt()
 	{
 		 GenerateBurst();
 	}
-	 toggleLED(m_CodeIndex);
-
+	toggleLED((m_CodeIndex/2) % 5);
 	m_CodeIndex++;
 	m_ZeroCrossFlag = true;
 	
-	if (m_CodeIndex >= 5)
+	if (m_CodeIndex >= 10)
 	{
-		if (m_SendCode[4])
+		if (m_SendCode[8])
 			turnOnLED(7);
 		else
 			turnOffLED(7);
@@ -59,20 +62,23 @@ void Transmitter::ZeroCrossInterrupt()
 		//EIMSK = 0; // Disable external interrupt INT4
 		m_ZeroCrossFlag = false; // Disable zerocross interrupt flag
 		m_CodeIndex = 0;
+			
 	}
 }
 
 
 void Transmitter::GenerateBurst() const
 {
+	DDRH = 0xFF; //Port H til timer 4 output
 	OCR4A = 65;
 	// Init af timer 4
 	TCCR4A = 0b00010000;
 	TCCR4B = 0b00001001;
-	TDelay(3); // 1ms standard i x10 protokollen
+	TDelay(1); // 1ms standard i x10 protokollen
 	TCCR4B = 0b00001000;
 	
-	PORTH &= (1<<PINH4);
+	//PORTH &= (1<<PINH4);
+	DDRH = 0;
 }
 
 void Transmitter::SetZeroCrossFlag()
@@ -86,9 +92,18 @@ void Transmitter::DisableZeroCrossFlag()
 }
 
 
-void Transmitter::SendCode(uint8_t condition)
+void Transmitter::SendCode(uint8_t command)
 {
-	m_SendCode[4] = condition;
+	if (command)
+	{
+		m_SendCode[8] = 1;
+		m_SendCode[9] = 0;
+	}
+	else
+	{
+		m_SendCode[8] = 0;
+		m_SendCode[9] = 0;		
+	}
 	//EIMSK = 0b00010000; // Enable external interrupt INT4
 }
 

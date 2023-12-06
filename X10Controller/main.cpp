@@ -12,8 +12,8 @@
 #include "led.h"
 #include "SystemController.h"
 
-unsigned char Transmitter::m_CodeIndex;
-unsigned char Transmitter::m_SendCode[5];
+uint8_t Transmitter::m_CodeIndex;
+uint8_t Transmitter::m_SendCode[10];
 bool Transmitter::m_ZeroCrossFlag;
 SystemController systemcontroller(9600);
 
@@ -30,11 +30,11 @@ int main()
 	
 	while (1)
 	{		
-		/*systemcontroller.loadTemp();
+		systemcontroller.loadTemp();
 		
-		// TODO Hysterese!
+		 //TODO Hysterese!
 		
-		if(systemcontroller.getTemp() >= systemcontroller.getTempThreshold() && !tempHandle)
+		if(systemcontroller.getTemp() >= systemcontroller.getTempThreshold() + 0.5f && !tempHandle)
 		{
 			tempHandle = true;
 			systemcontroller.GetTransmitter().SendCode(1);
@@ -43,30 +43,29 @@ int main()
 	
 		}
 		
-		else if (systemcontroller.getTemp() <= systemcontroller.getTempThreshold() && tempHandle)
+		else if (systemcontroller.getTemp() <= systemcontroller.getTempThreshold() - 0.5f && tempHandle)
 		{
 			tempHandle = false;
 			systemcontroller.GetTransmitter().SendCode(0);
 			systemcontroller.GetTransmitter().SetZeroCrossFlag();
-			turnOffLED(5);
-			
-		}*/
+			turnOffLED(5);	
+		}
 		
-		//_delay_ms(1000);
+		_delay_ms(1000);
 		
 		
 		// --- TEST CODE ----
 		// ------------------
-		tempHandle = true;
-		systemcontroller.GetTransmitter().SendCode(1);
-		systemcontroller.GetTransmitter().SetZeroCrossFlag();
-		turnOnLED(5);
-		_delay_ms(1500);
-		tempHandle = false;
-		systemcontroller.GetTransmitter().SendCode(0);
-		systemcontroller.GetTransmitter().SetZeroCrossFlag();
-		turnOffLED(5);
-		_delay_ms(1500);
+		//tempHandle = true;
+		//systemcontroller.GetTransmitter().SendCode(1);
+		//systemcontroller.GetTransmitter().SetZeroCrossFlag();
+		//turnOnLED(5);
+		//_delay_ms(1500);
+		//tempHandle = false;
+		//systemcontroller.GetTransmitter().SendCode(0);
+		//systemcontroller.GetTransmitter().SetZeroCrossFlag();
+		//turnOffLED(5);
+		//_delay_ms(1500);
 		
 	}
 }

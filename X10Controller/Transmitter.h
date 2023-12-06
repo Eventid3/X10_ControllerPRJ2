@@ -34,7 +34,7 @@ class Transmitter
 	void TDelay(float ms) const;
 	
 	static uint8_t m_CodeIndex;
-	static uint8_t m_SendCode[5];
+	static uint8_t m_SendCode[10];
 	
 	static bool m_ZeroCrossFlag;
 };
