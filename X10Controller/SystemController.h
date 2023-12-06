@@ -29,6 +29,8 @@ public:
 		//initLEDport();
 		initSwitchPort();
 		
+		DDRA = 0xFF;
+		
 		initUART(baud, databit, rx_int); // Initialize UART: Baud = 9600, 8 data bits
 		
 		m_Temperature = LM75_temperature(0) / 2.0f;
@@ -51,6 +53,8 @@ public:
 	float getTempThreshold() const { return m_TempThreshold; }
 	void sendTemp();
 	void sendTempThreshold();
+	void sendError();
+	bool codeLockCorrect();
 	
 	char* getBuffer() { return m_Buffer; }
 	float convertBufferToFloat();

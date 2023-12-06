@@ -40,7 +40,6 @@ int main()
 			systemcontroller.GetTransmitter().SendCode(1);
 			systemcontroller.GetTransmitter().SetZeroCrossFlag();
 			turnOnLED(5);
-	
 		}
 		
 		else if (systemcontroller.getTemp() <= systemcontroller.getTempThreshold() - 0.5f && tempHandle)

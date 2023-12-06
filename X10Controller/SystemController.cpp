@@ -64,6 +64,11 @@ void SystemController::sendTempThreshold()
 	sendString(m_Buffer);
 }
 
+void SystemController::sendError()
+{
+	sendString("LOCKED!!!!");
+}
+
 void SystemController::loadFloatToBuffer(float f)
 {
 	clearBuffer();
@@ -74,26 +79,41 @@ void SystemController::loadFloatToBuffer(float f)
 	snprintf(m_Buffer,sizeof(m_Buffer),"%d.%d",intPart,decimalPart);
 }
 
+bool SystemController::codeLockCorrect()
+{
+	//TODO
+	if (PINA & (1 << PINA0) == 1)
+		return true;
+	return false;
+}
+
 void SystemController::handleInput(char c) 
 {
-	switch (c)
+	if(codeLockCorrect())
 	{
-		case '1':
-			loadTemp();
-			//toggleLED(0); // Til debugging
-			sendTemp();
-			break;
-		case '2':
-			//toggleLED(1); // til debugging
-			readString(10);
-			m_TempThreshold = convertBufferToFloat();
-			break;
-		case '3':
-			//toggleLED(2); // Til debugging
-			sendTempThreshold();
-			break;
-		default:
-			break;
+		switch (c)
+		{
+			case '1':
+				loadTemp();
+				//toggleLED(0); // Til debugging
+				sendTemp();
+				break;
+			case '2':
+				//toggleLED(1); // til debugging
+				readString(10);
+				m_TempThreshold = convertBufferToFloat();
+				sendTempThreshold();
+				break;
+			case '3':
+				//toggleLED(2); // Til debugging
+				sendTempThreshold();
+				break;
+			default:
+				break;
+		}
 	}
-
+	else
+	{
+		sendError();
+	}
 }

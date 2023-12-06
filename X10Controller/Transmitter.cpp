@@ -13,8 +13,6 @@ void Transmitter::Setup()
 	// port E til inputs
 	DDRE = 0; 
 	
-	DDRA = 0xFF;
-	PORTA |= (1 << 0);
 	PORTH |= (1<<PINH4);
 
 	// Disable external interrupt lige for nu
