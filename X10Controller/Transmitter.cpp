@@ -8,7 +8,7 @@
 #include "Transmitter.h"
 
 
-void Transmitter::Setup()
+void Transmitter::setup()
  {
 	 /*
 	 Denne funktion instiller alle de nødvændige porte Transmitteren skal bruge.
@@ -43,7 +43,7 @@ void Transmitter::Setup()
 	m_SendCode[9] = 0;
 }
 
-void Transmitter::ZeroCrossInterrupt()
+void Transmitter::zeroCrossInterrupt()
 {
 	/*
 	Denne funktion bliver kaldt på et ZeroCross interrupt på INT4.
@@ -51,7 +51,7 @@ void Transmitter::ZeroCrossInterrupt()
 
 	if(m_SendCode[m_CodeIndex])
 	{
-		 GenerateBurst();
+		 generateBurst();
 	}
 	toggleLED((m_CodeIndex/2) % 5);
 	m_CodeIndex++;
@@ -70,7 +70,7 @@ void Transmitter::ZeroCrossInterrupt()
 }
 
 
-void Transmitter::GenerateBurst() const
+void Transmitter::generateBurst() const
 {
 	/*
 	Genererer et squarewave signal på 120kHz på Port H Pin4.
@@ -81,24 +81,24 @@ void Transmitter::GenerateBurst() const
 	// Init af timer 4
 	TCCR4A = 0b00010000;
 	TCCR4B = 0b00001001;
-	TDelay(1); // 1ms standard i x10 protokollen
+	timerDelay(1); // 1ms standard i x10 protokollen
 	TCCR4B = 0b00001000;
 	
 	DDRH = 0; // Sluk for port H
 }
 
-void Transmitter::SetZeroCrossFlag()
+void Transmitter::setZeroCrossFlag()
 {
 	m_ZeroCrossFlag = true;
 }
 
-void Transmitter::DisableZeroCrossFlag()
+void Transmitter::disableZeroCrossFlag()
 {
 	m_ZeroCrossFlag = false;
 }
 
 
-void Transmitter::SendCode(uint8_t command)
+void Transmitter::sendCode(uint8_t command)
 {
 	/*
 	Indstiller de sidste to bit m_SendCode til de rigtige værdier, afhængigt af input.
@@ -117,7 +117,7 @@ void Transmitter::SendCode(uint8_t command)
 	}
 }
 
-void Transmitter::TDelay(float ms) const
+void Transmitter::timerDelay(float ms) const
 {
 	/*
 	Delay funktion der tager et antal millisekunder som input, og 

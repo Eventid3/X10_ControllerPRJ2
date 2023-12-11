@@ -23,15 +23,15 @@ class Transmitter
 public:
 	Transmitter(){}
 	
-	void Setup();
-	void SendCode(uint8_t);
-	void GenerateBurst() const;
-	void ZeroCrossInterrupt();
-	void SetZeroCrossFlag();
-	void DisableZeroCrossFlag();
-	bool ReadyToRecieve() const { return m_ZeroCrossFlag; }
+	void setup();
+	void sendCode(uint8_t);
+	void generateBurst() const;
+	void zeroCrossInterrupt();
+	void setZeroCrossFlag();
+	void disableZeroCrossFlag();
+	bool readyToRecieve() const { return m_ZeroCrossFlag; }
 		
-	void TDelay(float ms) const;
+	void timerDelay(float ms) const;
 	
 private:
 	static uint8_t m_CodeIndex;

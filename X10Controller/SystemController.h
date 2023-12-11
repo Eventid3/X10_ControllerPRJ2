@@ -37,7 +37,7 @@ public:
 		m_TempThreshold = 24.0f; 
 		
 		m_Transmitter = Transmitter();
-		m_Transmitter.Setup();
+		m_Transmitter.setup();
 	}
 	
 	void handleInput(char c);
@@ -57,7 +57,7 @@ public:
 	void loadFloatToBuffer(float f);
 	void clearBuffer();
 	
-	Transmitter GetTransmitter() { return m_Transmitter; }
+	Transmitter getTransmitter() { return m_Transmitter; }
 private:
 	float m_Temperature; 
 	float m_TempThreshold;

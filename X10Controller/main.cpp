@@ -33,16 +33,16 @@ int main()
 		if(systemcontroller.getTemp() >= systemcontroller.getTempThreshold() + hysterese && !tempHandle)
 		{
 			tempHandle = true;
-			systemcontroller.GetTransmitter().SendCode(1);
-			systemcontroller.GetTransmitter().SetZeroCrossFlag();
+			systemcontroller.getTransmitter().sendCode(1);
+			systemcontroller.getTransmitter().setZeroCrossFlag();
 			turnOnLED(5);
 		}
 		
 		else if (systemcontroller.getTemp() <= systemcontroller.getTempThreshold() - hysterese && tempHandle)
 		{
 			tempHandle = false;
-			systemcontroller.GetTransmitter().SendCode(0);
-			systemcontroller.GetTransmitter().SetZeroCrossFlag();
+			systemcontroller.getTransmitter().sendCode(0);
+			systemcontroller.getTransmitter().setZeroCrossFlag();
 			turnOffLED(5);	
 		}
 		
@@ -69,10 +69,10 @@ ISR(INT4_vect)
 {
 	toggleLED(6);
 		
-	if (systemcontroller.GetTransmitter().ReadyToRecieve())
+	if (systemcontroller.getTransmitter().readyToRecieve())
 	{
-		systemcontroller.GetTransmitter().DisableZeroCrossFlag();
-		systemcontroller.GetTransmitter().ZeroCrossInterrupt();
+		systemcontroller.getTransmitter().disableZeroCrossFlag();
+		systemcontroller.getTransmitter().zeroCrossInterrupt();
 	}
 }
 
