@@ -25,9 +25,9 @@ class SystemController
 public:
 	SystemController(int baud, int databit = 8, int rx_int = 1) 
 	{
-		LM75_init();
-		//initLEDport();
-		initSwitchPort();
+		LM75_init(); // init temperatursensor på Arduino Shield
+		initSwitchPort(); // Switch port til test
+		initLEDport(); // LED'er til debugging
 		
 		DDRA = 0xFF;
 		
@@ -35,14 +35,10 @@ public:
 		
 		m_Temperature = LM75_temperature(0) / 2.0f;
 		m_TempThreshold = 24.0f; 
-		m_Humidity = 0;
-		m_CO2 = 0;
 		
 		m_Transmitter = Transmitter();
 		m_Transmitter.Setup();
 	}
-	
-	//void toggleLED(unsigned char led_nr);
 	
 	void handleInput(char c);
 	
@@ -65,8 +61,6 @@ public:
 private:
 	float m_Temperature; 
 	float m_TempThreshold;
-	float m_Humidity;
-	float m_CO2;
 	
 	char m_Buffer[10];
 	

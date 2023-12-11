@@ -9,6 +9,9 @@
 
 void SystemController::readString(uint8_t maxLength)
 {
+	/* 
+	Læser en modtaget string via UART til bufferen 
+	*/
 	clearBuffer();
 	
 	while (!charReady()){}
@@ -21,19 +24,21 @@ void SystemController::readString(uint8_t maxLength)
 
 		if (receivedChar == '\n' || receivedChar == '\r')
 		{
-			break;  // Exit the loop when newline character is received
+			break;  // Går ud af loopet hvis der er modtaget newline eller return char
 		}
 		m_Buffer[i] = receivedChar;
 		i++;
 	}
 	
-	m_Buffer[i] = '\0';
+	m_Buffer[i] = '\0'; // Afslutter med null-termination char
 	
-	//sendString(m_Buffer);
 }
 
 void SystemController::clearBuffer()
 {
+	/*
+	Denne funktion clearer bufferen til ene af nulls
+	*/
 	 for (uint8_t i = 0; i < 10; i++)
 	 {
 		 m_Buffer[i] = '\0';
@@ -42,16 +47,25 @@ void SystemController::clearBuffer()
 
 float SystemController::convertBufferToFloat()
 {
+	/*
+	Konverterer dataen i bufferen til en float
+	*/
 	return atof(m_Buffer);
 }
 
 void SystemController::loadTemp()
 {
+	/*
+	Læser temperaturen fra LM75 sensoren til m_Temperature
+	*/
 	m_Temperature = LM75_temperature(0) / 2.0f;
 }
 
 void SystemController::sendTemp()
 {
+	/*
+	Sender den nuværende temperatur til UserInterfacet
+	*/
 	loadFloatToBuffer(m_Temperature);
 	
 	sendString(m_Buffer);
@@ -59,6 +73,9 @@ void SystemController::sendTemp()
 
 void SystemController::sendTempThreshold()
 {
+	/*
+	Sender den nuværende terskelværdi på temperaturen til UserInterfacet
+	*/
 	loadFloatToBuffer(m_TempThreshold);
 	
 	sendString(m_Buffer);
@@ -66,11 +83,17 @@ void SystemController::sendTempThreshold()
 
 void SystemController::sendError()
 {
+	/*
+	Sender en fejlbesked
+	*/
 	sendString("LOCKED!!!!");
 }
 
 void SystemController::loadFloatToBuffer(float f)
 {
+	/*
+	Læser en float in i bufferen som en string/const char*
+	*/
 	clearBuffer();
 	
 	int intPart = (int)f;
@@ -81,7 +104,10 @@ void SystemController::loadFloatToBuffer(float f)
 
 bool SystemController::codeLockCorrect()
 {
-	//TODO
+	/*
+	Tjekker om der er logisk HIGH på den pin 
+	der tjekker om kodelåsen er låst op.
+	*/
 	if (PINA & (1 << PINA0) == 1)
 		return true;
 	return false;
@@ -89,6 +115,12 @@ bool SystemController::codeLockCorrect()
 
 void SystemController::handleInput(char c) 
 {
+	/*
+	Håndterer den modtagne kommando fra UserInterfacet.
+	Tjekker desuden om kodelåsen er indstillet korrekt, og 
+	sender en fejlmeddelelse hvis dette er tilfældet.
+	*/
+	
 	if(codeLockCorrect())
 	{
 		switch (c)
@@ -99,7 +131,7 @@ void SystemController::handleInput(char c)
 				sendTemp();
 				break;
 			case '2':
-				//toggleLED(1); // til debugging
+				//toggleLED(1); // Til debugging
 				readString(10);
 				m_TempThreshold = convertBufferToFloat();
 				sendTempThreshold();

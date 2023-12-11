@@ -20,7 +20,7 @@
 
 class Transmitter
 {
-	public:
+public:
 	Transmitter(){}
 	
 	void Setup();
@@ -33,6 +33,7 @@ class Transmitter
 		
 	void TDelay(float ms) const;
 	
+private:
 	static uint8_t m_CodeIndex;
 	static uint8_t m_SendCode[10];
 	

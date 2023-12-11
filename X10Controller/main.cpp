@@ -9,7 +9,6 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
-#include "led.h"
 #include "SystemController.h"
 
 uint8_t Transmitter::m_CodeIndex;
@@ -23,18 +22,15 @@ ISR(USART0_RX_vect);
 int main()
 {
 	bool tempHandle = false;
+	float hysterese = 0.5f;
 	sei();
 	
-	initLEDport();
-	initSwitchPort();
 	
 	while (1)
 	{		
 		systemcontroller.loadTemp();
 		
-		 //TODO Hysterese!
-		
-		if(systemcontroller.getTemp() >= systemcontroller.getTempThreshold() + 0.5f && !tempHandle)
+		if(systemcontroller.getTemp() >= systemcontroller.getTempThreshold() + hysterese && !tempHandle)
 		{
 			tempHandle = true;
 			systemcontroller.GetTransmitter().SendCode(1);
@@ -42,7 +38,7 @@ int main()
 			turnOnLED(5);
 		}
 		
-		else if (systemcontroller.getTemp() <= systemcontroller.getTempThreshold() - 0.5f && tempHandle)
+		else if (systemcontroller.getTemp() <= systemcontroller.getTempThreshold() - hysterese && tempHandle)
 		{
 			tempHandle = false;
 			systemcontroller.GetTransmitter().SendCode(0);
