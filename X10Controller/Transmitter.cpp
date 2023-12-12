@@ -111,9 +111,9 @@ void Transmitter::sendCode(uint8_t command)
 	}
 	else
 	{
-		// Indstil m_SendCode til at åbne vinduet
+		// Indstil m_SendCode til at lukke vinduet
 		m_SendCode[8] = 0;
-		m_SendCode[9] = 0;		
+		m_SendCode[9] = 1;		
 	}
 }
 
