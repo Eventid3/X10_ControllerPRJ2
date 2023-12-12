@@ -33,16 +33,16 @@ int main()
 		if(systemcontroller.getTemp() >= systemcontroller.getTempThreshold() + hysterese && !tempHandle)
 		{
 			tempHandle = true;
-			systemcontroller.getTransmitter().sendCode(1);
-			systemcontroller.getTransmitter().setZeroCrossFlag();
+			systemcontroller.getTransmitter()->sendCode(1);
+			systemcontroller.getTransmitter()->setZeroCrossFlag();
 			turnOnLED(5);
 		}
 		
 		else if (systemcontroller.getTemp() <= systemcontroller.getTempThreshold() - hysterese && tempHandle)
 		{
 			tempHandle = false;
-			systemcontroller.getTransmitter().sendCode(0);
-			systemcontroller.getTransmitter().setZeroCrossFlag();
+			systemcontroller.getTransmitter()->sendCode(0);
+			systemcontroller.getTransmitter()->setZeroCrossFlag();
 			turnOffLED(5);	
 		}
 		
@@ -69,10 +69,10 @@ ISR(INT4_vect)
 {
 	toggleLED(6);
 		
-	if (systemcontroller.getTransmitter().readyToRecieve())
+	if (systemcontroller.getTransmitter()->readyToRecieve())
 	{
-		systemcontroller.getTransmitter().disableZeroCrossFlag();
-		systemcontroller.getTransmitter().zeroCrossInterrupt();
+		systemcontroller.getTransmitter()->disableZeroCrossFlag();
+		systemcontroller.getTransmitter()->zeroCrossInterrupt();
 	}
 }
 
